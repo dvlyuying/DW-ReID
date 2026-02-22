@@ -1,3 +1,19 @@
+## Dataset
+
+Our synthetic datasets are at following:
+
+SW-DukeMTMC-reID:
+[Rainy weather](https://drive.google.com/file/d/1ZC-hOWHfZAytAef0KZvNLhfnCI364a6k), 
+[Snowy weather](https://drive.google.com/file/d/13xcn1oQIUJbYVXeHRCfSwDiostSurXaF), 
+[Hazy weather](https://drive.google.com/file/d/1guBDf15tbySUUUxKvFmjz6fxDVodKdpE),
+Normal weather [DukeMTMC-reID](https://arxiv.org/abs/1609.01775)
+
+SW-Market-1501:
+[Rainy weather](https://drive.google.com/file/d/1wtkZjidVV2anpMCT58jlgdqQ3XDQjvzO), 
+[Snowy weather](https://drive.google.com/file/d/16tvPXMVJJS1ecd0xj4EnJ1RzKDJReP29), 
+[Hazy weather](https://drive.google.com/file/d/1NYmGS-xRkcz3ugWDqtf8zZ7GjpbF9qIG),
+Normal weather [Market-1501](https://drive.google.com/file/d/0B8-rUzbwVRk0c054eEozWG9COHM/view)
+
 
 ### Notice
 The full training code in `processor/processor_dwreid_stage2.py` will be open-sourced after acceptance.
