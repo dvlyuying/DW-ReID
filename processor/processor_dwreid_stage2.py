@@ -1,0 +1,1 @@
+﻿# The full training code in `processor/processor_dwreid_stage2.py` will be open-sourced after acceptance.

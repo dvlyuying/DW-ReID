@@ -1,0 +1,102 @@
+MODEL:
+  PRETRAIN_CHOICE: 'imagenet'
+  METRIC_LOSS_TYPE: 'triplet'
+  IF_LABELSMOOTH: 'on'
+  IF_WITH_CENTER: 'no'
+  NAME: 'ViT-B-16'
+  STRIDE_SIZE: [12, 12]
+  ID_LOSS_WEIGHT : 0.25
+  TRIPLET_LOSS_WEIGHT : 1.0
+  I2T_LOSS_WEIGHT : 1.0
+  SIE_CAMERA: True
+  SIE_COE : 1.0
+
+INPUT:
+  SIZE_TRAIN: [256, 128]
+  SIZE_TEST: [256, 128]
+  PROB: 0.5 # random horizontal flip
+  RE_PROB: 0.5 # random erasing
+  PADDING: 10
+  PIXEL_MEAN: [0.5, 0.5, 0.5]
+  PIXEL_STD: [0.5, 0.5, 0.5]
+
+DATALOADER:
+  SAMPLER: 'softmax_triplet'
+  NUM_INSTANCE: 4
+  NUM_WORKERS: 8
+
+SOLVER:
+  STAGE1:
+    IMS_PER_BATCH: 128
+    OPTIMIZER_NAME: "Adam"
+    BASE_LR: 0.00035
+    WARMUP_LR_INIT: 0.00001
+    LR_MIN: 1e-6
+    WARMUP_METHOD: 'linear'
+    WEIGHT_DECAY:  1e-4
+    WEIGHT_DECAY_BIAS: 1e-4
+    MAX_EPOCHS: 120
+    CHECKPOINT_PERIOD: 120
+    LOG_PERIOD: 50
+    WARMUP_EPOCHS: 5
+
+  STAGE2:
+    IMS_PER_BATCH: 48 #64
+    OPTIMIZER_NAME: "Adam"
+    BASE_LR: 0.000005
+    WARMUP_METHOD: 'linear'
+    WARMUP_ITERS: 10
+    WARMUP_FACTOR: 0.1
+    WEIGHT_DECAY:  0.0001
+    WEIGHT_DECAY_BIAS: 0.0001
+    LARGE_FC_LR: False
+    MAX_EPOCHS: 720
+    CHECKPOINT_PERIOD: 10
+    LOG_PERIOD: 50
+    EVAL_PERIOD: 60
+    BIAS_LR_FACTOR: 2
+    STEPS: [30, 50]
+    GAMMA: 0.1
+
+  STAGE3:
+    IMS_PER_BATCH: 3 #64
+    OPTIMIZER_NAME: "Adam"
+    BASE_LR: 0.0002
+    MAX_EPOCHS: 200
+    CHECKPOINT_PERIOD: 100
+    LOG_PERIOD: 50
+    EVAL_PERIOD: 10
+
+TEST:
+  EVAL: True
+  IMS_PER_BATCH: 256
+  RE_RANKING: False
+  WEIGHT: ''
+  NECK_FEAT: 'before'
+  FEAT_NORM: 'yes'
+  WEATHER: 'yes'
+
+DATASETS:
+#  NAMES: ('market1501')
+#   ROOT_DIR: ('')
+# OUTPUT_DIR: ''
+
+  NAMES: ('dukemtmc')
+#  NAMES: ('msmt17')
+
+  ROOT_DIR: ('/data1/wangbin')          #原来的数据集
+#  ROOT_DIR: ('/data1/wangbin/AWDW-ReID/Hazy_Market-1501-v15.09.15') #before加上天气数据集，检查一下对应目录的后缀
+#  ROOT_DIR: ('/data1/yuying/data/dukemtmcreid/haze') #new加上雪数据集
+#  ROOT_DIR: ('/data1/wangbin/AWDW-ReID/MSMT17') 
+
+
+#  ROOT_DIR: ('/data1/yuying/2022-CVPR-WeatherNet-main/output/before/de-haze') #原来WeatherNet去雪的结果数据集
+#  ROOT_DIR: ('/data1/yuying/2022-CVPR-WeatherNet-main/output/in_range2/de-haze') #改进in_range2去雪的结果数据集
+#OUTPUT_DIR: '/data1/wangbin/AWDW-ReID/DW-ReID-weathernet/pth/dukemtmc/test/nan_continue/all/720/'
+OUTPUT_DIR: '/data1/wangbin/AWDW-ReID/DW-ReID-weathernet/pth/dukemtmc/test/nan_continue/all/720_without_Lfe_Lftri'
+#OUTPUT_DIR: '/data1/wangbin/AWDW-ReID/DW-ReID-weathernet/pth/market/all/720'
+
+#OUTPUT_DIR: '/data1/wangbin/AWDW-ReID/DW-ReID-weathernet/pth/dukemtmc/test/'
+
+# CUDA_VISIBLE_DEVICES=3 python train_dwreid.py --config_file configs/person/vit_dwreid.yml
+# python test_dwreid.py --config_file configs/person/vit_dwreid.yml TEST.WEATHER yes
